@@ -8,8 +8,8 @@ export const useDragEvent = (ref: RefObject<HTMLDivElement>) => {
     if (ref.current) {
       ref.current.addEventListener("mouseup", handleMouseUp);
       ref.current.addEventListener("mousedown", handleMouseDown);
-      ref.current.addEventListener("mousemove", handleMouseMove);
       ref.current.addEventListener("mouseleave", handleMouseLeave);
+      ref.current.addEventListener("mousemove", handleMouseMove);
     }
     return () => {
       ref?.current?.removeEventListener("mousedown", (event) =>
@@ -18,6 +18,9 @@ export const useDragEvent = (ref: RefObject<HTMLDivElement>) => {
       ref?.current?.removeEventListener("mouseup", (event) =>
         handleMouseUp(event)
       );
+      ref?.current?.removeEventListener("mouseleave", (event) =>
+      handleMouseMove(event)
+    );
       ref?.current?.removeEventListener("mousemove", (event) =>
         handleMouseMove(event)
       );
@@ -26,20 +29,16 @@ export const useDragEvent = (ref: RefObject<HTMLDivElement>) => {
 
   const handleMouseUp = (event: MouseEvent) => {
     event.preventDefault();
-    event.stopPropagation();
     setDragging(false);
   };
 
   const handleMouseDown = (event: MouseEvent) => {
     event.preventDefault();
-    event.stopPropagation();
     setDragging(true);
   };
 
   const handleMouseMove = (event: MouseEvent) => {
     event.preventDefault();
-    event.stopPropagation();
-    setDragging(false);
     const rect = ref.current?.getBoundingClientRect();
     const maxPosition = {
       left: window.innerWidth - (rect ? rect.left : 0),
@@ -68,10 +67,9 @@ export const useDragEvent = (ref: RefObject<HTMLDivElement>) => {
   };
 
   const handleMouseLeave = (event: MouseEvent) => {
-    event.stopPropagation()
-    event.preventDefault()
-    setDragging(false)
-  }
+    event.preventDefault();
+    setDragging(false);
+  };
 
   return position;
 };

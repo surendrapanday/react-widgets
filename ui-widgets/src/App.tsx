@@ -3,7 +3,9 @@ import './App.css';
 import Draggable from './draggable/Draggable';
 
 const App = () => {
-  return <Draggable />
+  return <div className='wrapper'>
+    <Draggable />
+  </div>
 }
 
 export default App
